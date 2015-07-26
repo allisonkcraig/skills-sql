@@ -59,17 +59,12 @@ WHERE m.year = 1960;
     --   LEFT JOIN brands AS b
     --     ON b.name = m.brand_name
     -- WHERE b.discontinued IS NULL;
-    **************************************
 
-    SELECT b.name,
-           b.founded,
-           m.name
-    FROM Model AS m
-      LEFT JOIN brands AS b
-        ON b.name = m.brand_name
+    SELECT b.name, b.discontinued
+    FROM Brands AS b
     WHERE b.discontinued IS NULL;
 
-    
+
 -- 2. Modify this left join so it only selects models that have brands in the Brands table.
 -- before: 
     -- SELECT m.name,
@@ -78,18 +73,21 @@ WHERE m.year = 1960;
     -- FROM Models AS m
     --   LEFT JOIN Brands AS b
     --     ON b.name = m.brand_name;
+
  SELECT m.name,
         b.name,
         b.founded
     FROM Models AS m
       LEFT JOIN Brands AS b
         ON b.name = m.brand_name
-    WHERE b.name NOT NULL;
+    WHERE b.name IS NOT NULL;
 
 
 -- followup question: In your own words, describe the difference between 
 -- left joins and inner joins.
-**************************************
+ **************************************
+-- Left joins will add information that pertains to the the "left" side of the ven diagram. Inner Joins take only the common data between the two tables. 
+ **************************************
 -- 3. Modify the query so that it only selects brands that don't have any car models in the cars table. 
 -- (Hint: it should only show Tesla's row.)
 -- before: 
@@ -99,13 +97,13 @@ WHERE m.year = 1960;
     --   LEFT JOIN Models
     --     ON brands.name = Models.brand_name
     -- WHERE Models.year > 1940;
-    **************************************
+
     SELECT Brands.name,
            Brands.founded
     FROM Brands
       LEFT JOIN Models
         ON brands.name = Models.brand_name
-        WHERE Models.brand_name = NULL;
+        WHERE Models.brand_name IS NULL;
 
 -- 4. Modify the query to add another column to the results to show 
 -- the number of years from the year of the model *until* the brand becomes discontinued
@@ -119,8 +117,16 @@ WHERE m.year = 1960;
     --   LEFT JOIN brands AS b
     --     ON m.brand_name = b.name
     -- WHERE b.discontinued NOT NULL;
-    **************************************
 
+    SELECT b.name,
+           m.name,
+           m.year,
+           b.discontinued,
+           b.discontinued - m.year AS years_until_brand_discontinued
+    FROM Models AS m
+      LEFT JOIN brands AS b
+        ON m.brand_name = b.name
+    WHERE b.discontinued NOT NULL;
 
 
 
@@ -142,7 +148,7 @@ GROUP BY brand_name;
 --    with columns ``name``, ``year``, and ``winner``. Choose 
 --    an appropriate datatype and nullability for each column.
 CREATE TABLE Awards (
-name VARCHAR(20) PRIMARY KEY,
+name VARCHAR(20) PRIMARY KEY NOT NULL,
 year INT(4),
 winner VARCHAR(20),
 );
