@@ -37,11 +37,11 @@ LIMIT 10 OFFSET 15;
 --    for model(s) even if its brand is not in the Brands table.
 --    (The year the brand was founded should be ``null`` if 
 --    the brand is not in the Brands table.)
-**************************************
--- SELECT m.brand_name, m.name, b.founded DEFAULT NULL
--- FROM Models AS m
--- LEFT JOIN Brands AS b
--- WHERE b.founded = 1960;
+SELECT m.brand_name, b.name, b.founded
+FROM Models AS m
+LEFT JOIN Brands AS b 
+ON m.brand_name = b.name
+WHERE m.year = 1960;
 
 
 
@@ -61,6 +61,15 @@ LIMIT 10 OFFSET 15;
     -- WHERE b.discontinued IS NULL;
     **************************************
 
+    SELECT b.name,
+           b.founded,
+           m.name
+    FROM Model AS m
+      LEFT JOIN brands AS b
+        ON b.name = m.brand_name
+    WHERE b.discontinued IS NULL;
+
+    
 -- 2. Modify this left join so it only selects models that have brands in the Brands table.
 -- before: 
     -- SELECT m.name,
